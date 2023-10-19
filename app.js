@@ -7,6 +7,7 @@ const path = require('path');
 const db = require('./config/database.js');
 const userRoutes = require('./routes/user.routes.js');
 const generalRoutes = require('./routes/general.routes.js');
+const enquiryRoutes = require('./routes/enquiry.routes.js');
 
 // Establishing the Database connection
 db.connect();
@@ -38,5 +39,6 @@ app.use(morgan('tiny'));
 // Routes
 app.use(userRoutes);
 app.use('/g', generalRoutes);
+app.use('/enquiries', enquiryRoutes);
 
 module.exports = app;
