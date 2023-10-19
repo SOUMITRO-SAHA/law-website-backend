@@ -21,7 +21,7 @@ exports.createInformation = async (req, res) => {
       });
     }
 
-    const { name, address, phone, email } = value;
+    const { name, description, address, phone, email } = value;
 
     const existingInformation = await Information.findOne();
 
@@ -34,6 +34,7 @@ exports.createInformation = async (req, res) => {
 
     const information = new Information({
       name,
+      description,
       address,
       phone,
       email,

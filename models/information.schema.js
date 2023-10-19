@@ -6,6 +6,9 @@ const infoSchema = new mongoose.Schema({
     required: true,
     maxLength: [100, 'Name must be less than 100 characters.'],
   },
+  description: {
+    type: String,
+  },
   imageUrl: {
     type: String,
     // match: [/^https?:\/\/\S+$/, 'Please enter a valid URL for the image.'],
