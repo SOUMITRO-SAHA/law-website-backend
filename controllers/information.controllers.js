@@ -114,7 +114,7 @@ exports.updateInformationImage = async (req, res) => {
     if (err instanceof multer.MulterError) {
       return res.send({
         success: false,
-        message: 'Error uploading file',
+        message: 'Error uploading Image',
         error: err.message,
       });
     } else if (err) {

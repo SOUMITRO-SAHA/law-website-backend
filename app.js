@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user.routes.js');
 const generalRoutes = require('./routes/general.routes.js');
 const enquiryRoutes = require('./routes/enquiry.routes.js');
 const informationRoutes = require('./routes/info.routes.js');
+const servicesRoutes = require('./routes/services.routes.js');
 
 // Establishing the Database connection
 db.connect();
@@ -42,5 +43,6 @@ app.use(userRoutes);
 app.use('/g', generalRoutes);
 app.use('/enquiries', enquiryRoutes);
 app.use('/information', informationRoutes);
+app.use('/services', servicesRoutes);
 
 module.exports = app;

@@ -10,18 +10,18 @@ const {
 } = require('../controllers/services.controllers');
 
 // Create a new service
-router.post('/services', createService);
+router.post('/', createService);
 
 // Get all services
-router.get('/services', getAllServices);
+router.get('/', getAllServices);
 
 // Get a specific service by ID
-router.get('/services/:id', getServiceById);
+router.get('/:id', getServiceById);
 
 // Update a service by ID
-router.put('/services/:id', updateServiceById);
+router.patch('/:id', updateServiceById);
 
 // Delete a service by ID
-router.delete('/services/:id', deleteServiceById);
+router.delete('/:id', deleteServiceById);
 
 module.exports = router;
