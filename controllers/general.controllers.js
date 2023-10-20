@@ -176,11 +176,11 @@ exports.deleteBanner = async (req, res) => {
       });
     }
 
-    // Check if the banner has an existing image
-    if (bannerToDelete.imageUrl) {
-      // Delete the existing image from the file system
-      fs.unlinkSync(bannerToDelete.imageUrl);
-    }
+    // // Check if the banner has an existing image
+    // if (bannerToDelete.imageUrl) {
+    //   // Delete the existing image from the file system
+    //   fs.unlinkSync(bannerToDelete.imageUrl);
+    // }
 
     const deletedBanner = await Banner.findByIdAndDelete(bannerId);
 
