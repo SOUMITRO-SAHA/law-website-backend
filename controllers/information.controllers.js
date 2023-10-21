@@ -130,7 +130,7 @@ exports.updateInformationImage = async (req, res) => {
 
       if (information.imageUrl) {
         // Now First Delete the previous image from the storage
-        fs.unlinkSync(information.imageUrl);
+        // fs.unlinkSync(information.imageUrl);
       }
 
       const updatedInformation = await Information.findByIdAndUpdate(
