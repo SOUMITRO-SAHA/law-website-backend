@@ -14,4 +14,15 @@ const aboutSchema = new mongoose.Schema({
   },
 });
 
+// Static method to ensure there's only one document
+aboutSchema.statics.getSingleton = async function () {
+  let about = await this.findOne();
+  if (!about) {
+    about = new this();
+    await about.save();
+  }
+
+  return about;
+};
+
 module.exports = mongoose.model('About', aboutSchema);
