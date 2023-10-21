@@ -11,6 +11,7 @@ const enquiryRoutes = require('./routes/enquiry.routes.js');
 const informationRoutes = require('./routes/info.routes.js');
 const servicesRoutes = require('./routes/services.routes.js');
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
+const aboutRoutes = require('./routes/about.routes.js');
 
 // Establishing the Database connection
 db.connect();
@@ -46,5 +47,6 @@ app.use('/enquiries', enquiryRoutes);
 app.use('/information', informationRoutes);
 app.use('/services', servicesRoutes);
 app.use('/testimonials', testimonialsRoutes);
+app.use('/about', aboutRoutes);
 
 module.exports = app;
