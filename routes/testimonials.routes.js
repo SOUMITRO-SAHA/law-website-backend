@@ -19,7 +19,7 @@ router.get('/', getAllTestimonials);
 router.get('/:id', getTestimonialById);
 
 // Update a testimonial by ID
-router.put('/:id', updateTestimonialById);
+router.patch('/:id', updateTestimonialById);
 
 // Delete a testimonial by ID
 router.delete('/:id', deleteTestimonialById);
