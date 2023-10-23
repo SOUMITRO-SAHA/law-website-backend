@@ -9,19 +9,17 @@ const courseSchema = new mongoose.Schema({
     ],
     required: [true, 'Course name is required'],
   },
+  imageUrl: {
+    type: String,
+  },
   duration: {
     type: Number,
-    required: [true, 'Duration is required'],
+    // required: [true, 'Duration is required'],
     min: [1, 'Duration must be at least 1 years'],
-  },
-  seatLeft: {
-    type: Number,
-    required: [true, 'Number of seats available is required'],
-    min: [0, 'Number of seats must be at least 0'],
   },
   shortDescription: {
     type: String,
-    required: [true, 'Short description is required'],
+    // required: [true, 'Short description is required'],
     maxLength: [
       255,
       'Short description must be less than or equal to 255 characters',
@@ -29,11 +27,11 @@ const courseSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'Description is required'],
+    // required: [true, 'Description is required'],
   },
   curriculum: {
     type: String,
-    required: [true, 'Curriculum is required'],
+    // required: [true, 'Curriculum is required'],
   },
   brochureLink: {
     type: String,
@@ -43,6 +41,11 @@ const courseSchema = new mongoose.Schema({
       },
       message: 'Invalid URL format. Please enter a valid URL.',
     },
+  },
+  contact: {
+    type: Number,
+    required: [true, 'Contact is required'],
+    min: [10, 'Duration must be at least 1 years'],
   },
 });
 

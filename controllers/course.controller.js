@@ -3,9 +3,26 @@ const {
   courseCreateValidator,
   courseUpdateValidator,
 } = require('../validator/course.validator');
+const upload = require('../services/imageUploader');
+const multer = require('multer');
+const courseImageUpload = upload('courses').single('image');
 
 exports.createCourse = async (req, res) => {
-  try {
+  courseImageUpload(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.send({
+        status: false,
+        message: 'Error uploading course',
+        error: err.message,
+      });
+    } else if (err) {
+      return res.send({
+        success: false,
+        message: 'Internal Server Error',
+        error: err.message,
+      });
+    }
+
     const { error, value } = courseCreateValidator(req.body);
     if (error) {
       return res.send({
@@ -15,45 +32,68 @@ exports.createCourse = async (req, res) => {
       });
     }
 
-    const {
-      name,
-      duration,
-      seatLeft,
-      shortDescription,
-      description,
-      curriculum,
-      brochureLink,
-    } = value;
+    try {
+      const {
+        name,
+        duration,
+        contact,
+        shortDescription,
+        description,
+        curriculum,
+        brochureLink,
+      } = value;
 
-    const course = new Course({
-      name,
-      duration,
-      seatLeft,
-      shortDescription,
-      description,
-      curriculum,
-      brochureLink,
-    });
+      let imageUrl = '';
+      if (req.file) {
+        imageUrl = req.file.path;
+      }
 
-    const savedCourse = await course.save();
+      const course = new Course({
+        name,
+        duration,
+        contact,
+        shortDescription,
+        description,
+        curriculum,
+        brochureLink,
+        imageUrl,
+      });
 
-    res.status(201).json({
-      success: true,
-      message: 'Course created successfully',
-      course: savedCourse,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
-  }
+      const savedCourse = await course.save();
+
+      res.status(201).json({
+        success: true,
+        message: 'Course created successfully',
+        course: savedCourse,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  });
 };
 
 exports.updateCourse = async (req, res) => {
-  try {
-    const { id: courseId } = req.params;
+  const { id: courseId } = req.params;
+
+  courseImageUpload(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.send({
+        status: false,
+        message: 'Error uploading course',
+        error: err.message,
+      });
+    } else if (err) {
+      return res.send({
+        success: false,
+        message: 'Internal Server Error',
+        error: err.message,
+      });
+    }
+
     const { error, value } = courseUpdateValidator(req.body);
 
     if (error) {
@@ -64,29 +104,40 @@ exports.updateCourse = async (req, res) => {
       });
     }
 
-    const updatedCourse = await Course.findByIdAndUpdate(courseId, value, {
-      new: true,
-    });
-
-    if (!updatedCourse) {
-      return res.status(404).json({
-        success: false,
-        message: 'Course not found',
-      });
+    let imageUrl = '';
+    if (req.file) {
+      imageUrl = req.file.path;
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Course updated successfully',
-      course: updatedCourse,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Internal Server Error',
-      error: error.message,
-    });
-  }
+    try {
+      const updatedCourse = await Course.findByIdAndUpdate(
+        courseId,
+        { ...value, imageUrl },
+        {
+          new: true,
+        }
+      );
+
+      if (!updatedCourse) {
+        return res.status(404).json({
+          success: false,
+          message: 'Course not found',
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Course updated successfully',
+        course: updatedCourse,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  });
 };
 
 exports.getAllCourses = async (req, res) => {
