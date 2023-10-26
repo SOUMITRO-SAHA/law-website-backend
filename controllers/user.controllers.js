@@ -209,3 +209,131 @@ exports.getUserInfo = async (req, res) => {
     });
   }
 };
+
+// Get User By Id
+
+// Social Links
+// Add social links to user profile
+exports.addSocials = async (req, res) => {
+  try {
+    const { error, value } = socialsProfileValidators(req.body);
+
+    if (error) {
+      return res.send({
+        success: false,
+        message: 'Validation failed',
+        error: error.message,
+      });
+    }
+
+    const { socials } = value;
+
+    // Find the user by ID and update their social links
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { socials },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};
+
+// Update user's social links
+exports.updateSocials = async (req, res) => {
+  try {
+    const { error, value } = socialsProfileValidators(req.body);
+
+    if (error) {
+      return res.send({
+        success: false,
+        message: 'Validation failed',
+        error: error.details[0].message,
+      });
+    }
+
+    const { socials } = value;
+
+    const updatedUser = await User.findById(req.user._id);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    socials.forEach((social) => {
+      const existingSocial = updatedUser.socials.find(
+        (s) => s.name === social.name
+      );
+
+      if (existingSocial) {
+        existingSocial.link = social.link;
+      } else {
+        updatedUser.socials.push(social);
+      }
+    });
+
+    const savedUser = await updatedUser.save();
+
+    res.status(200).json({
+      success: true,
+      user: savedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};
+
+// Remove a specific social link
+exports.removeSocial = async (req, res) => {
+  try {
+    const { socialId } = req.params;
+
+    // Find the user by ID and remove the specified social link
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { socials: { _id: socialId } } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};

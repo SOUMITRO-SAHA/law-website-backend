@@ -37,6 +37,28 @@ const userSchema = mongoose.Schema(
       enum: Object.values(AuthRoles),
       default: AuthRoles.USER,
     },
+    socials: [
+      {
+        name: {
+          type: String,
+          enum: [
+            'Facebook',
+            'Twitter',
+            'YouTube',
+            'Instagram',
+            'LinkedIn',
+            'Github',
+          ],
+        },
+        link: {
+          type: String,
+          match: [
+            /^(https?:\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+            'Please provide a valid URL.',
+          ],
+        },
+      },
+    ],
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date,
   },

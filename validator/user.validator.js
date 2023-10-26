@@ -31,3 +31,26 @@ exports.updateProfileValidator = (data) => {
 
   return schema.validate(data);
 };
+
+// Add Socials Validators
+exports.socialsProfileValidators = (data) => {
+  const schema = Joi.object({
+    socials: Joi.array().items(
+      Joi.object({
+        name: Joi.string().valid(
+          'Facebook',
+          'Twitter',
+          'YouTube',
+          'Instagram',
+          'LinkedIn',
+          'Github'
+        ),
+        link: Joi.string().pattern(
+          /^(https?:\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+        ),
+      })
+    ),
+  });
+
+  return schema.validate(data);
+};
